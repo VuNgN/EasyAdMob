@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?actionBarSize"
+            app:layout_collapseMode="pin"
+            app:title="AdMod Examples" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <TextView
+            android:id="@+id/banner"
+            style="@style/TextView.Custom.MenuButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Banner ad example" />
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:dividerColor="#9e9e9e"
+            app:dividerThickness="1dp" />
+
+        <TextView
+            android:id="@+id/native_ad"
+            style="@style/TextView.Custom.MenuButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Native ad example" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:dividerColor="#9e9e9e"
+            app:dividerThickness="1dp" />
+
+        <TextView
+            android:id="@+id/interstitial"
+            style="@style/TextView.Custom.MenuButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Interstitial ad example" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:dividerColor="#9e9e9e"
+            app:dividerThickness="1dp" />
+
+        <TextView
+            android:id="@+id/open"
+            style="@style/TextView.Custom.MenuButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open ad example" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:dividerColor="#9e9e9e"
+            app:dividerThickness="1dp" />
+
+        <TextView
+            android:id="@+id/rewarded"
+            style="@style/TextView.Custom.MenuButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rewarded ad example" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
