@@ -6,10 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.vungn.admob.manager.AppOpenAdManager
+import com.vungn.admob.manager.OpenAdManager
 
 class OpenExampleActivity : AppCompatActivity() {
-    private lateinit var adManager: AppOpenAdManager
+    private lateinit var adManager: OpenAdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,19 +22,22 @@ class OpenExampleActivity : AppCompatActivity() {
         }
         val textView = findViewById<TextView>(R.id.main_activity_text)
 
-        adManager = AppOpenAdManager.Builder(this).setTimeout(3000).addListener(
-            object : AppOpenAdManager.OpenAdListener {
-                override fun onStateChange(state: AppOpenAdManager.State) {
+        adManager = OpenAdManager.Builder(this).setTimeout(3000).addListener(
+            object : OpenAdManager.OpenAdListener {
+                override fun onStateChange(
+                    manager: OpenAdManager,
+                    state: OpenAdManager.State
+                ) {
                     when (state) {
-                        AppOpenAdManager.State.LOADING -> textView.text = "State Ad: Loading"
-                        AppOpenAdManager.State.NOT_LOADED -> textView.text = "State Ad: Not Loaded"
-                        AppOpenAdManager.State.LOADED -> {
+                        OpenAdManager.State.LOADING -> textView.text = "State Ad: Loading"
+                        OpenAdManager.State.NOT_LOADED -> textView.text = "State Ad: Not Loaded"
+                        OpenAdManager.State.LOADED -> {
                             textView.text = "State Ad: Loaded"
                             adManager.showAd()
                         }
 
-                        AppOpenAdManager.State.SHOWING -> textView.text = "State Ad: Showing"
-                        AppOpenAdManager.State.CLOSED -> textView.text =
+                        OpenAdManager.State.SHOWING -> textView.text = "State Ad: Showing"
+                        OpenAdManager.State.CLOSED -> textView.text =
                             getString(R.string.main_activity_text)
 
                         else -> {}

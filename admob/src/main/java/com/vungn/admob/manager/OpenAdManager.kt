@@ -7,22 +7,22 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
-import com.vungn.admob.util.AdModeConfig
+import com.vungn.admob.util.AdMobConfig
 import com.vungn.admob.util.Timer
 
 
-class AppOpenAdManager private constructor(private val activity: Activity) {
+class OpenAdManager private constructor(private val activity: Activity) {
     private var appOpenAd: AppOpenAd? = null
     private var _isShowingAd: Boolean = false
     private var _isLoadingAd: Boolean = false
-    private var _loadingTimeout: Long = AdModeConfig.COUNTER_TIME_MILLISECONDS
+    private var _loadingTimeout: Long = AdMobConfig.COUNTER_TIME_MILLISECONDS
     private var _listener: MutableList<OpenAdListener> = mutableListOf()
     private var _state: State = State.NONE
     private val _timer: Timer = Timer()
 
     init {
         _listener.add(object : OpenAdListener {
-            override fun onStateChange(state: State) {
+            override fun onStateChange(manager: OpenAdManager, state: State) {
                 _state = state
             }
         })
@@ -47,22 +47,22 @@ class AppOpenAdManager private constructor(private val activity: Activity) {
             return
         }
         if (isAdAvailable()) {
-            _listener.forEach { it.onStateChange(State.LOADED) }
+            _listener.forEach { it.onStateChange(this, State.LOADED) }
             return
         }
         _isLoadingAd = true
-        _listener.forEach { it.onStateChange(State.LOADING) }
+        _listener.forEach { it.onStateChange(this, State.LOADING) }
         _timer.start(_loadingTimeout) {
             if (_state == State.LOADING) {
-                _listener.forEach { it.onStateChange(State.TIME_OUT) }
+                _listener.forEach { it.onStateChange(this, State.TIME_OUT) }
             }
         }
         val loadCallback = object : AppOpenAd.AppOpenAdLoadCallback() {
             override fun onAdLoaded(appOpenAd: AppOpenAd) {
                 super.onAdLoaded(appOpenAd)
-                this@AppOpenAdManager.appOpenAd = appOpenAd
+                this@OpenAdManager.appOpenAd = appOpenAd
                 _isLoadingAd = false
-                _listener.forEach { it.onStateChange(State.LOADED) }
+                _listener.forEach { it.onStateChange(this@OpenAdManager, State.LOADED) }
                 _timer.finish()
             }
 
@@ -70,31 +70,31 @@ class AppOpenAdManager private constructor(private val activity: Activity) {
                 super.onAdFailedToLoad(p0)
                 _isLoadingAd = false
                 Log.e(TAG, "onAdFailedToLoad: ${p0.message}")
-                _listener.forEach { it.onStateChange(State.NOT_LOADED) }
+                _listener.forEach { it.onStateChange(this@OpenAdManager, State.NOT_LOADED) }
                 _timer.finish()
             }
         }
 
         val request: AdRequest = AdRequest.Builder().setHttpTimeoutMillis(5000).build()
         AppOpenAd.load(
-            activity, AdModeConfig.APP_OPEN_AD_KEY, request, loadCallback
+            activity, AdMobConfig.APP_OPEN_AD_KEY, request, loadCallback
         )
     }
 
     fun showAd() {
         if (!isAdAvailable()) {
-            _listener.forEach { it.onStateChange(State.NOT_LOADED) }
+            _listener.forEach { it.onStateChange(this, State.NOT_LOADED) }
             return
         }
         if (_isShowingAd) {
-            _listener.forEach { it.onStateChange(State.SHOWING) }
+            _listener.forEach { it.onStateChange(this, State.SHOWING) }
             return
         }
         appOpenAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 appOpenAd = null
                 _isShowingAd = false
-                _listener.forEach { it.onStateChange(State.CLOSED) }
+                _listener.forEach { it.onStateChange(this@OpenAdManager, State.CLOSED) }
             }
 
 
@@ -102,12 +102,12 @@ class AppOpenAdManager private constructor(private val activity: Activity) {
                 appOpenAd = null
                 _isShowingAd = false
                 Log.d(TAG, "onAdFailedToShowFullScreenContent: ${adError.message}")
-                _listener.forEach { it.onStateChange(State.CLOSED) }
+                _listener.forEach { it.onStateChange(this@OpenAdManager, State.CLOSED) }
             }
 
             override fun onAdShowedFullScreenContent() {
                 _isShowingAd = true
-                _listener.forEach { it.onStateChange(State.SHOWING) }
+                _listener.forEach { it.onStateChange(this@OpenAdManager, State.SHOWING) }
             }
         }
         appOpenAd?.show(activity)
@@ -121,7 +121,7 @@ class AppOpenAdManager private constructor(private val activity: Activity) {
     private fun isAdAvailable(): Boolean = appOpenAd != null
 
     interface OpenAdListener {
-        fun onStateChange(state: State)
+        fun onStateChange(manager: OpenAdManager, state: State)
     }
 
     enum class State {
@@ -129,24 +129,24 @@ class AppOpenAdManager private constructor(private val activity: Activity) {
     }
 
     class Builder(activity: Activity) {
-        private val appOpenAdManager = AppOpenAdManager(activity)
+        private val openAdManager = OpenAdManager(activity)
 
         fun setTimeout(timeout: Long): Builder {
-            appOpenAdManager.setTimeout(timeout)
+            openAdManager.setTimeout(timeout)
             return this
         }
 
         fun addListener(listener: OpenAdListener): Builder {
-            appOpenAdManager.addListener(listener)
+            openAdManager.addListener(listener)
             return this
         }
 
-        fun build(): AppOpenAdManager {
-            return appOpenAdManager
+        fun build(): OpenAdManager {
+            return openAdManager
         }
     }
 
     companion object {
-        private val TAG = AppOpenAdManager::class.simpleName
+        private val TAG = OpenAdManager::class.simpleName
     }
 }

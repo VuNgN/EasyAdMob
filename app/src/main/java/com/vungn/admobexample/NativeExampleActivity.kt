@@ -12,7 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.vungn.admob.manager.AppNativeAdManager
+import com.vungn.admob.manager.NativeAdManager
 import com.vungn.admob.util.NativeAd
 import com.vungn.admob.util.VideoController
 import com.vungn.admob.view.MediaView
@@ -22,7 +22,7 @@ class NativeExampleActivity : AppCompatActivity() {
     private lateinit var videoStatus: TextView
     private lateinit var loadAd: Button
     private lateinit var startVideoAdsMuted: CheckBox
-    private lateinit var nativeAdManager: AppNativeAdManager
+    private lateinit var nativeAdManager: NativeAdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +38,13 @@ class NativeExampleActivity : AppCompatActivity() {
         loadAd = findViewById(R.id.btn_load)
         startVideoAdsMuted = findViewById(R.id.cb_start_muted)
 
-        nativeAdManager = AppNativeAdManager(this)
+        nativeAdManager = NativeAdManager(this)
 
         loadAd.setOnClickListener {
             loadAd.setEnabled(false)
             nativeAdManager.loadAd(
                 videoMuted = startVideoAdsMuted.isChecked,
-                listener = object : AppNativeAdManager.NativeAdLoadListener() {
+                listener = object : NativeAdManager.NativeAdLoadListener() {
                     override fun onAdLoaded(currentNativeAd: NativeAd) {
                         val frameLayout = findViewById<FrameLayout>(R.id.fl_adplaceholder)
                         val adView: NativeAdView =

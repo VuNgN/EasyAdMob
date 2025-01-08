@@ -10,11 +10,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.vungn.admob.manager.AppRewardedAdManager
+import com.vungn.admob.manager.RewardedAdManager
 import com.vungn.admob.util.RewardItem
 
 class RewardedExampleActivity : AppCompatActivity() {
-    private lateinit var adManager: AppRewardedAdManager
+    private lateinit var adManager: RewardedAdManager
     private var countDownTimer: CountDownTimer? = null
     private var timeRemaining: Long = 0
     private var coinCount = 0
@@ -34,11 +34,11 @@ class RewardedExampleActivity : AppCompatActivity() {
         }
         coinCountText = findViewById(R.id.coin_count_text)
         retryButton = findViewById(R.id.retry_button)
-        adManager = AppRewardedAdManager.Builder(this).setTimeout(3000)
-            .addListener(object : AppRewardedAdManager.AppRewardedAdListener {
-                override fun onStateChange(state: AppRewardedAdManager.State) {
+        adManager = RewardedAdManager.Builder(this).setTimeout(3000)
+            .addListener(object : RewardedAdManager.AppRewardedAdListener {
+                override fun onStateChange(state: RewardedAdManager.State) {
                     when (state) {
-                        AppRewardedAdManager.State.CLOSED -> adManager.loadAd()
+                        RewardedAdManager.State.CLOSED -> adManager.loadAd()
                         else -> {}
                     }
                 }

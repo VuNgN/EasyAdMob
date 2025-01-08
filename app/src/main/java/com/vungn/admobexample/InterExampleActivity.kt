@@ -9,10 +9,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.vungn.admob.manager.AppInterstitialAdManager
+import com.vungn.admob.manager.InterstitialAdManager
 
 class InterExampleActivity : AppCompatActivity() {
-    private lateinit var adManager: AppInterstitialAdManager
+    private lateinit var adManager: InterstitialAdManager
     private var countDownTimer: CountDownTimer? = null
     private var timerMilliseconds = 0L
     private var gameOver = false
@@ -29,14 +29,14 @@ class InterExampleActivity : AppCompatActivity() {
             insets
         }
         retryButton = findViewById(R.id.retry_button)
-        adManager = AppInterstitialAdManager.Builder(this).setTimeout(3000).addListener(
-            object : AppInterstitialAdManager.InterstitialAdListener {
-                override fun onStateChange(state: AppInterstitialAdManager.State) {
+        adManager = InterstitialAdManager.Builder(this).setTimeout(3000).addListener(
+            object : InterstitialAdManager.InterstitialAdListener {
+                override fun onStateChange(state: InterstitialAdManager.State) {
                     when (state) {
-                        AppInterstitialAdManager.State.LOADING -> retryButton.isEnabled = false
-                        AppInterstitialAdManager.State.NOT_LOADED -> retryButton.isEnabled = true
-                        AppInterstitialAdManager.State.LOADED -> retryButton.isEnabled = true
-                        AppInterstitialAdManager.State.CLOSED -> {
+                        InterstitialAdManager.State.LOADING -> retryButton.isEnabled = false
+                        InterstitialAdManager.State.NOT_LOADED -> retryButton.isEnabled = true
+                        InterstitialAdManager.State.LOADED -> retryButton.isEnabled = true
+                        InterstitialAdManager.State.CLOSED -> {
                             adManager.loadAd()
                             startGame()
                         }

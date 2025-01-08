@@ -8,11 +8,11 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.vungn.admob.util.AdModeConfig
-import com.vungn.admob.util.AdModeConfig.COUNTER_TIME_MILLISECONDS
+import com.vungn.admob.util.AdMobConfig
+import com.vungn.admob.util.AdMobConfig.COUNTER_TIME_MILLISECONDS
 import com.vungn.admob.util.Timer
 
-class AppInterstitialAdManager private constructor(private val activity: Activity) {
+class InterstitialAdManager private constructor(private val activity: Activity) {
     private var interstitialAd: InterstitialAd? = null
     private var adIsLoading: Boolean = false
     private var _loadingTimeout: Long = COUNTER_TIME_MILLISECONDS
@@ -28,7 +28,7 @@ class AppInterstitialAdManager private constructor(private val activity: Activit
         })
     }
 
-    private fun addListener(listener: InterstitialAdListener) {
+    fun addListener(listener: InterstitialAdListener) {
         _listener.add(listener)
     }
 
@@ -59,7 +59,7 @@ class AppInterstitialAdManager private constructor(private val activity: Activit
         val adRequest = AdRequest.Builder().build()
 
         InterstitialAd.load(activity,
-            AdModeConfig.APP_INTERSTITIAL_AD_KEY,
+            AdMobConfig.APP_INTERSTITIAL_AD_KEY,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -123,24 +123,24 @@ class AppInterstitialAdManager private constructor(private val activity: Activit
     }
 
     class Builder(activity: Activity) {
-        private val appInterstitialAdManager = AppInterstitialAdManager(activity)
+        private val interstitialAdManager = InterstitialAdManager(activity)
 
         fun addListener(listener: InterstitialAdListener): Builder {
-            appInterstitialAdManager.addListener(listener)
+            interstitialAdManager.addListener(listener)
             return this
         }
 
         fun setTimeout(timeout: Long): Builder {
-            appInterstitialAdManager.setTimeout(timeout)
+            interstitialAdManager.setTimeout(timeout)
             return this
         }
 
-        fun build(): AppInterstitialAdManager {
-            return appInterstitialAdManager
+        fun build(): InterstitialAdManager {
+            return interstitialAdManager
         }
     }
 
     companion object {
-        private val TAG = AppInterstitialAdManager::class.simpleName
+        private val TAG = InterstitialAdManager::class.simpleName
     }
 }

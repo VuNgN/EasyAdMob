@@ -6,14 +6,7 @@ import androidx.annotation.RawRes
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 
-object AdModeConfig {
-    const val COUNTER_TIME_MILLISECONDS = 3000L
-    var APP_BANNER_AD_KEY = "ca-app-pub-3940256099942544/9214589741"
-    var APP_INTERSTITIAL_AD_KEY = "ca-app-pub-3940256099942544/8691691433"
-    var APP_REWARDED_AD_KEY = "ca-app-pub-3940256099942544/5224354917"
-    var APP_NATIVE_AD_KEY = "ca-app-pub-3940256099942544/2247696110"
-    var APP_OPEN_AD_KEY = "ca-app-pub-3940256099942544/9257395921"
-
+object AdMobConfig {
     fun initAds(
         testDeviceIds: List<String> = emptyList(),
         maxAdContentRating: String? = null,
@@ -68,4 +61,11 @@ object AdModeConfig {
         APP_NATIVE_AD_KEY = nativeKey
         APP_OPEN_AD_KEY = openKey
     }
+
+    const val COUNTER_TIME_MILLISECONDS = 3000L
+    var APP_BANNER_AD_KEY = "ca-app-pub-3940256099942544/6300978111"
+    var APP_INTERSTITIAL_AD_KEY = "ca-app-pub-3940256099942544/1033173712"
+    var APP_REWARDED_AD_KEY = "ca-app-pub-3940256099942544/5224354917"
+    var APP_NATIVE_AD_KEY = "ca-app-pub-3940256099942544/2247696110"
+    var APP_OPEN_AD_KEY = "ca-app-pub-3940256099942544/9257395921"
 }

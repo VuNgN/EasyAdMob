@@ -10,11 +10,14 @@ import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import com.vungn.admob.util.CMPUtils
+import com.vungn.admob.util.Timer
 
 class GoogleAdsConsentManager private constructor(context: Context) {
     private val consentInformation: ConsentInformation =
         UserMessagingPlatform.getConsentInformation(context)
     private val cmpUtils: CMPUtils = CMPUtils(context)
+    private val timer: Timer = Timer()
+    private var isDoListener = true
 
     /** Helper variable to determine if the app can request ads. */
     val canRequestAds: Boolean get() = consentInformation.canRequestAds()
@@ -37,6 +40,13 @@ class GoogleAdsConsentManager private constructor(context: Context) {
         testDeviceIds: List<String> = emptyList(),
         listener: GatherConsentListener
     ) {
+        isDoListener = true
+        timer.start(timeout) {
+            if (isDoListener) {
+                listener.onDisableAds()
+                isDoListener = false
+            }
+        }
         if (debug) {
             reset()
         }
@@ -58,23 +68,41 @@ class GoogleAdsConsentManager private constructor(context: Context) {
                         cmpUtils.isCheckGDPR = true
                         UserMessagingPlatform.showPrivacyOptionsForm(activity) {
                             if (canRequestAds) {
-                                listener.onCanShowAds()
+                                if (isDoListener) {
+                                    listener.onCanShowAds()
+                                    isDoListener = false
+                                }
                             } else {
-                                listener.onDisableAds()
+                                if (isDoListener) {
+                                    listener.onDisableAds()
+                                    isDoListener = false
+                                }
                             }
                         }
                     }, timeout)
                 } else {
-                    listener.onCanShowAds()
+                    if (isDoListener) {
+                        listener.onCanShowAds()
+                        isDoListener = false
+                    }
                 }
             } else {
-                listener.onCanShowAds()
+                if (isDoListener) {
+                    listener.onCanShowAds()
+                    isDoListener = false
+                }
             }
         }, {
             if (canRequestAds) {
-                listener.onCanShowAds()
+                if (isDoListener) {
+                    listener.onCanShowAds()
+                    isDoListener = false
+                }
             } else {
-                listener.onDisableAds()
+                if (isDoListener) {
+                    listener.onDisableAds()
+                    isDoListener = false
+                }
             }
         })
     }

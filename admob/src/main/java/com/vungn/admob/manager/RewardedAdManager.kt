@@ -8,15 +8,15 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.vungn.admob.util.AdModeConfig
+import com.vungn.admob.util.AdMobConfig
 import com.vungn.admob.util.RewardItem
 import com.vungn.admob.util.Timer
 
-class AppRewardedAdManager private constructor(private val activity: Activity) {
+class RewardedAdManager private constructor(private val activity: Activity) {
     private var rewardedAd: RewardedAd? = null
     private var _isLoading = false
     private var _isShowing = false
-    private var _loadingTimeout: Long = AdModeConfig.COUNTER_TIME_MILLISECONDS
+    private var _loadingTimeout: Long = AdMobConfig.COUNTER_TIME_MILLISECONDS
     private var _listener: MutableList<AppRewardedAdListener> = mutableListOf()
     private var _state: State = State.NONE
     private val _timer: Timer = Timer()
@@ -25,7 +25,7 @@ class AppRewardedAdManager private constructor(private val activity: Activity) {
     val rewardItem: RewardItem?
         get() = _rewardItem
 
-    private fun addListener(listener: AppRewardedAdListener) {
+    fun addListener(listener: AppRewardedAdListener) {
         _listener.add(listener)
     }
 
@@ -68,7 +68,7 @@ class AppRewardedAdManager private constructor(private val activity: Activity) {
         }
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(activity,
-            AdModeConfig.APP_REWARDED_AD_KEY,
+            AdMobConfig.APP_REWARDED_AD_KEY,
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -163,20 +163,20 @@ class AppRewardedAdManager private constructor(private val activity: Activity) {
     }
 
     class Builder(activity: Activity) {
-        private val appRewardedAdManager = AppRewardedAdManager(activity)
+        private val rewardedAdManager = RewardedAdManager(activity)
 
         fun setTimeout(timeout: Long): Builder {
-            appRewardedAdManager.setTimeout(timeout)
+            rewardedAdManager.setTimeout(timeout)
             return this
         }
 
         fun addListener(listener: AppRewardedAdListener): Builder {
-            appRewardedAdManager.addListener(listener)
+            rewardedAdManager.addListener(listener)
             return this
         }
 
-        fun build(): AppRewardedAdManager {
-            return appRewardedAdManager
+        fun build(): RewardedAdManager {
+            return rewardedAdManager
         }
     }
 

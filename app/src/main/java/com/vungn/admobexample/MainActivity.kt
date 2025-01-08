@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.vungn.admob.manager.GoogleAdsConsentManager
-import com.vungn.admob.util.AdModeConfig
+import com.vungn.admob.util.AdMobConfig
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +28,11 @@ class MainActivity : AppCompatActivity() {
             testDeviceIds = testDeviceIds,
             listener = object : GoogleAdsConsentManager.GatherConsentListener {
                 override fun onCanShowAds() {
-                    AdModeConfig.initAds(testDeviceIds = testDeviceIds)
+                    AdMobConfig.initAds(testDeviceIds = testDeviceIds)
                 }
 
                 override fun onDisableAds() {
-                    AdModeConfig.initAds(testDeviceIds = testDeviceIds)
+                    AdMobConfig.initAds(testDeviceIds = testDeviceIds)
                 }
             })
 

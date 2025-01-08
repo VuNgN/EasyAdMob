@@ -14,11 +14,11 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest.Builder
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
-import com.vungn.admob.util.AdModeConfig
+import com.vungn.admob.util.AdMobConfig
 import com.vungn.admob.view.AdView
 import java.util.UUID
 
-class AppBannerAdManager(private val activity: Activity) : LifecycleEventObserver {
+class BannerAdManager(private val activity: Activity) : LifecycleEventObserver {
     private lateinit var adSize: AdSize
     private var adView: AdView? = null
 
@@ -31,7 +31,7 @@ class AppBannerAdManager(private val activity: Activity) : LifecycleEventObserve
     ) {
         val adView = AdView(activity)
         this.adView = adView
-        adView.adUnitId = AdModeConfig.APP_BANNER_AD_KEY
+        adView.adUnitId = AdMobConfig.APP_BANNER_AD_KEY
         adSize = activity.let {
             val displayMetrics = it.resources.displayMetrics
             val adWidthPixels = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

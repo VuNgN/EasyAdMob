@@ -6,10 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.vungn.admob.manager.AppBannerAdManager
+import com.vungn.admob.manager.BannerAdManager
 
 class BannerExampleActivity : AppCompatActivity() {
-    private var adManager: AppBannerAdManager? = null
+    private var adManager: BannerAdManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +22,12 @@ class BannerExampleActivity : AppCompatActivity() {
         }
 
         val adViewContainer = findViewById<FrameLayout>(R.id.bannerAd)
-        adManager = AppBannerAdManager(this)
+        adManager = BannerAdManager(this)
         adManager?.loadAd(
             adViewContainer = adViewContainer,
             lifecycle = lifecycle,
             isCollapse = true,
-            listener = object : AppBannerAdManager.BannerAdLoadListener() {
+            listener = object : BannerAdManager.BannerAdLoadListener() {
                 override fun onAdLoaded() {
                     // Code to be executed when an ad finishes loading.
                 }

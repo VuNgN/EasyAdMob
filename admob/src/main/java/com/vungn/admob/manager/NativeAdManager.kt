@@ -9,17 +9,24 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.VideoOptions
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.vungn.admob.util.AdModeConfig
+import com.vungn.admob.util.AdMobConfig
 import com.vungn.admob.util.NativeAd
+import com.vungn.admob.util.Timer
 
-class AppNativeAdManager(private val activity: Activity) {
+class NativeAdManager(private val activity: Activity) {
     private var nativeAd: NativeAd? = null
+    private var timer: Timer = Timer()
+    private var isAdLoaded = false
 
     @RequiresPermission("android.permission.INTERNET")
     fun loadAd(
-        videoMuted: Boolean = true, listener: NativeAdLoadListener
+        videoMuted: Boolean = true, timeout: Long = 5000, listener: NativeAdLoadListener
     ) {
-        val builder = AdLoader.Builder(activity, AdModeConfig.APP_NATIVE_AD_KEY)
+        timer.start(timeout) {
+            if (isAdLoaded) return@start
+            listener.onAdTimeout()
+        }
+        val builder = AdLoader.Builder(activity, AdMobConfig.APP_NATIVE_AD_KEY)
 
         builder.forNativeAd { nativeAd ->
             // OnUnifiedNativeAdLoadedListener implementation.
@@ -37,6 +44,7 @@ class AppNativeAdManager(private val activity: Activity) {
                 this.nativeAd?.destroy()
             }
             listener.onAdLoaded(NativeAd(nativeAd))
+            isAdLoaded = true
         }
 
         val videoOptions = VideoOptions.Builder().setStartMuted(videoMuted).build()
@@ -82,6 +90,8 @@ class AppNativeAdManager(private val activity: Activity) {
         open fun onAdClicked() {}
         open fun onAdImpression() {}
         open fun onAdFailedToLoad() {}
+
+        open fun onAdTimeout() {}
         open fun onAdClosed() {}
         open fun onAdOpened() {}
         open fun onAdSwipeGestureClicked() {}

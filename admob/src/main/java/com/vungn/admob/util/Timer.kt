@@ -1,7 +1,7 @@
 package com.vungn.admob.util
 
 import android.os.CountDownTimer
-import com.vungn.admob.util.AdModeConfig.COUNTER_TIME_MILLISECONDS
+import com.vungn.admob.util.AdMobConfig.COUNTER_TIME_MILLISECONDS
 import java.util.concurrent.TimeUnit
 
 class Timer {

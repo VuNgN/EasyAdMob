@@ -193,7 +193,7 @@ var adManager: AppOpenAdManager? = null
 
 adManager = AppOpenAdManager.Builder(this).setTimeout(3000).addListener(
     object : AppOpenAdManager.OpenAdListener {
-        override fun onStateChange(state: AppOpenAdManager.State) {
+        override fun onStateChange(manager: AppOpenAdManager, state: AppOpenAdManager.State) {
             when (state) {
                 AppOpenAdManager.State.LOADING -> {}
                 AppOpenAdManager.State.NOT_LOADED -> {}
